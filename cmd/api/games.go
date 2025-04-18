@@ -16,25 +16,24 @@ func (app *application) showGameHandler(w http.ResponseWriter, r *http.Request) 
 	id, err := app.readIDParam(r)
 
 	if err != nil || id < 1 {
-		http.NotFound(w, r)
+		app.notFoundResponse(w, r)
 		return
 	}
 
 	game := data.Game{
-		ID: id,
-		//ReleaseYear: 2017,
-		CreatedAt: time.Now(),
-		Title:     "The Legend of Zelda: Breath of the Wild",
-		Developer: "Nintendo",
-		Genres:    []string{"action", "adventure"},
-		Platforms: []string{"Nintedo Switch", "PS5"},
-		Version:   1,
+		ID:          id,
+		ReleaseYear: 2017,
+		CreatedAt:   time.Now(),
+		Title:       "The Legend of Zelda: Breath of the Wild",
+		Developer:   "Nintendo",
+		Genres:      []string{"action", "adventure"},
+		Platforms:   []string{"Nintedo Switch", "PS5"},
+		Version:     1,
 	}
 
-	err = app.WriteJSON(w, http.StatusOK, game, nil)
+	err = app.WriteJSON(w, http.StatusOK, envelope{"game": game}, nil)
 
 	if err != nil {
-		app.logger.Error(err.Error())
-		http.Error(w, "he server encountered a problem and could not process your request", http.StatusInternalServerError)
+		app.serverResponse(w, r, err)
 	}
 }
