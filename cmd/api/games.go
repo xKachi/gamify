@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"time"
@@ -9,7 +10,22 @@ import (
 )
 
 func (app *application) createGameHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, "create a new game")
+	// struct for decoding the request from the client
+	var input struct {
+		Title  string `json:"title"`
+		Developer string `json:"developer"`
+		ReleaseYear int32 `json:"release_year"`
+		Genres []string `json:"genres"`
+		Platforms []string `json:"platforms"`
+	}
+	
+	err := json.NewDecoder(r.Body).Decode(&input)
+
+	if err != nil {
+		app.errorResponse(w, r, http.StatusBadRequest, err.Error())
+		return
+	}
+	fmt.Fprintf(w, "%+v\n", input)
 }
 
 func (app *application) showGameHandler(w http.ResponseWriter, r *http.Request) {
@@ -20,6 +36,7 @@ func (app *application) showGameHandler(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
+	// struct we expected to be in the response body, i.e the structure of the response
 	game := data.Game{
 		ID:          id,
 		ReleaseYear: 2017,
