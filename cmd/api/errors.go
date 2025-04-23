@@ -14,6 +14,10 @@ import (
 	"net/http"
 )
 
+func (app *application) badRequest(w http.ResponseWriter, r *http.Request, err error) {
+	app.errorResponse(w, r, http.StatusBadRequest, err.Error())
+}
+
 // application error
 // The logError() method is a generic helper for logging an error message along
 // with the current request method and URL as attributes in the log entry

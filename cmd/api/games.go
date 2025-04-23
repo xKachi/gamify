@@ -24,7 +24,7 @@ func (app *application) createGameHandler(w http.ResponseWriter, r *http.Request
 	err := app.readJSON(r, w, &input)
 
 	if err != nil {
-		app.errorResponse(w, r, http.StatusBadRequest, err.Error())
+		app.badRequest(w, r, err)
 		return
 	}
 	fmt.Fprintf(w, "%+v\n", input)
