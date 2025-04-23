@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"time"
@@ -12,14 +11,17 @@ import (
 func (app *application) createGameHandler(w http.ResponseWriter, r *http.Request) {
 	// struct for decoding the request from the client
 	var input struct {
-		Title  string `json:"title"`
-		Developer string `json:"developer"`
-		ReleaseYear int32 `json:"release_year"`
-		Genres []string `json:"genres"`
-		Platforms []string `json:"platforms"`
+		Title       string   `json:"title"`
+		Developer   string   `json:"developer"`
+		ReleaseYear int32    `json:"release_year"`
+		Genres      []string `json:"genres"`
+		Platforms   []string `json:"platforms"`
 	}
-	
-	err := json.NewDecoder(r.Body).Decode(&input)
+
+	// Use the new readJSON() helper to decode the request body into the input struct.
+	// If this returns an error we send the client the error message along with a 400
+	// Bad Request status code, just like before.
+	err := app.readJSON(r, w, &input)
 
 	if err != nil {
 		app.errorResponse(w, r, http.StatusBadRequest, err.Error())
