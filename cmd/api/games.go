@@ -13,7 +13,7 @@ func (app *application) createGameHandler(w http.ResponseWriter, r *http.Request
 	var input struct {
 		Title       string   `json:"title"`
 		Developer   string   `json:"developer"`
-		ReleaseYear int32    `json:"release_year"`
+		ReleaseYear    data.ReleaseYear`json:"release_year"`
 		Genres      []string `json:"genres"`
 		Platforms   []string `json:"platforms"`
 	}
